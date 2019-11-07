@@ -1,0 +1,104 @@
+create database tp_metodologia_festival2
+use tp_metodologia_festival2
+
+create table TipoDni
+(
+	id_tipoDni int identity(1,1),
+	tipoDni varchar(30)
+	
+	constraint pk_TidoDni primary key (id_tipoDni)
+)
+
+create table TipoIntegrante
+(
+	id_tipoIntegrante int identity(1,1),
+	tipoIntegrante varchar(30)
+	
+	constraint pk_tipoIntegrante primary key(id_tipoIntegrante)
+)
+
+create table Reconocimiento
+(
+	id_reconocimiento int identity(1,1),
+	reconocimiento varchar (30)
+	
+	constraint pk_reconocimiento primary key (id_reconocimiento)
+)
+
+create table Artista
+(
+	id_artista int identity(1,1),
+	artista varchar(30),
+	fechaInicioDisponibilidad smalldatetime,
+	fechaFinDisponibilidad smalldatetime,
+	id_reconocimiento int,
+	historia varchar(100)
+	
+	constraint pk_artista primary key (id_artista),	
+	constraint fk_artista_reconocimiento foreign key(id_reconocimiento) references Reconocimiento(id_reconocimiento)
+)
+
+create table Integrante
+(
+	id_integrante int identity(1,1),
+	nombre varchar(40),
+	apellido varchar(40),
+	id_tipoDni int,
+	dni int,
+	direccion varchar(60),
+	id_tipoIntegrante int,
+	id_artista int
+	
+	constraint pk_integrante primary key(id_integrante),
+	constraint fk_integrante_tipodni foreign key (id_tipoDni) references TipoDni (id_tipoDni),
+	constraint fk_integrante_tipoIntegrante foreign key (id_tipoIntegrante) references TipoIntegrante(id_tipoIntegrante),
+	constraint fk_integrante_artista foreign key (id_artista) references Artista (id_artista)
+)
+
+
+
+create table Noche
+(
+	id_noche int identity(1,1),
+	fecha smalldatetime,
+	descripcion varchar(300),
+	precioXnoche float
+	
+	constraint pk_noche primary key(id_noche),
+	
+)
+
+create table Presentacion
+(
+	id_presentacion int identity(1,1),
+	id_artista int,
+	horarioComienzo varchar(10),
+	id_noche int 
+	
+	
+	constraint pk_presentacion primary key (id_presentacion),
+	constraint fk_presentacion_artista foreign key (id_artista) references Artista(id_artista),
+	constraint fk_presentacion_noche foreign key (id_noche) references Noche (id_noche)
+) 
+
+
+
+create table TipoLogin
+(
+	id_tipoLogin int identity(1,1),
+	tipoLogin varchar(50)
+	
+	constraint pk_tipoLogin primary key (id_tipoLogin)
+)
+
+create table Usuario
+(
+	id_login int identity(1,1),
+	usuario varchar(255) NOT NULL,
+	contrasenia varchar(255) NOT NULL,
+	id_tipoLogin int
+	
+	constraint pk_usuario primary key (id_login),
+	constraint fk_login_tipoLogin foreign key (id_tipoLogin) references TipoLogin (id_tipoLogin)
+)
+
